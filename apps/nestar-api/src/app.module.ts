@@ -7,6 +7,8 @@ import { ApolloDriver } from '@nestjs/apollo';
 import { NestarBatchController } from 'apps/nestar-batch/src/nestar-batch.controller';
 import { NestarBatchService } from 'apps/nestar-batch/src/nestar-batch.service';
 import { AppResolver } from './app.resolver';
+import { ComponentsModule } from './components/components.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
  imports: [ConfigModule.forRoot(),
@@ -16,6 +18,8 @@ import { AppResolver } from './app.resolver';
        uploads: false,
        autoSchemaFile: true,
      }),
+     ComponentsModule,
+     DatabaseModule,
    ],
    controllers: [NestarBatchController],
    providers: [NestarBatchService, AppResolver],
