@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MemberResolver } from './member.resolver';
 import { MemberService } from './member.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import MemberSchema from '../../schemas/member.enums';
+import MemberSchema from '../../schemas/member.model';
 
 @Module({
   imports: [
