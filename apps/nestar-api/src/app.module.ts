@@ -9,6 +9,7 @@ import { NestarBatchService } from 'apps/nestar-batch/src/nestar-batch.service';
 import { AppResolver } from './app.resolver';
 import { ComponentsModule } from './components/components.module';
 import { DatabaseModule } from './database/database.module';
+import { T } from './libs/types/common';
 
 @Module({
  imports: [ConfigModule.forRoot(),
@@ -17,11 +18,20 @@ import { DatabaseModule } from './database/database.module';
        playground: true,
        uploads: false,
        autoSchemaFile: true,
+       formatError: (error:T) => {
+        console.log('error:', error);
+        const graphQlFormattedError = {
+          code: error?.extensions.code,
+          message: error?.extensions?.response?.exception?.message || error?.extensions?.response?.message || error?.message,
+        };
+        console.log('graphQlFormattedError:', graphQlFormattedError);
+        return graphQlFormattedError;
+       }
      }),
      ComponentsModule,
      DatabaseModule,
    ],
-   controllers: [NestarBatchController],
-   providers: [NestarBatchService, AppResolver],
+   controllers: [NestarBatchController, AppController],
+   providers: [NestarBatchService, AppResolver, AppService],
 })
 export class AppModule {}
