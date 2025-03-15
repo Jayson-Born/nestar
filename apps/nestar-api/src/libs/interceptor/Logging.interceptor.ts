@@ -20,6 +20,7 @@ export class LoggingInterceptor implements NestInterceptor {
         /* (2) Errors handing via GraphQl */
 
         /* (3) No Errors giving Response below */
+    }
     return next
       .handle()
       .pipe(
@@ -30,7 +31,7 @@ export class LoggingInterceptor implements NestInterceptor {
     ),
       );
   }
-}
+
 
 private stringify(context: ExecutionContext): string {
     return JSON.stringify(context).slice(0, 75);
