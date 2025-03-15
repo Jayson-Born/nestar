@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { Member } from '../../libs/dto/member/member';
 import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
 import { MemberStatus } from '../../libs/enums/member.enum';
-import { Message } from '../../schemas/common.enums';
+import { Message } from '../../libs/enums/common.enums';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable()

@@ -11,6 +11,8 @@ export enum Message {
     WRONG_PASSWORD = "Wrong password!",
     NOT_FOUND = "NOT_FOUND!",
     USED_NICK_PHONE = "YOU ARE INSERTING ALREADY USED NICK OR PHONE!",
-    NOT_AUTENTICATED="you are not authenticated , please log in",
+    NOT_AUTHENTICATED="you are not authenticated , please log in",
     TOKEN_CREATION_FAILED = "TOKEN_CREATION_FAILED",
+	TOKEN_NOT_EXIST = "TOKEN_NOT_EXIST",
+	ONLY_SPECIFIC_ROLES_ALLOWED = "ONLY_SPECIFIC_ROLES_ALLOWED",
 }
