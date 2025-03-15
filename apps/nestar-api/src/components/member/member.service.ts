@@ -65,4 +65,13 @@ public async updateMember(): Promise<string> {
 public async getMember(): Promise<string> {
     return 'getMember executed!';
 }
+
+public async getAllMembersByAdim(): Promise<string> {
+    return 'updateMember executed!';
+}
+public async getAllMemberByAdim(): Promise<string> {
+    return 'updateMember executed!';
+}
+
+
 }
