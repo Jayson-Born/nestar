@@ -19,7 +19,7 @@ public async comparePassword(password: string, hashPassword: string): Promise<bo
     return await bcrypt.compare(password, hashPassword)
 }
 
-public async cretaeToken(member:Member): Promise<string> {
+public async createToken(member:Member): Promise<string> {
     const payload:T ={};
     Object.keys(member['_doc']? member['_doc']: member).map((ele) => {
         payload[`${ele}`] = member[`${ele}`];
