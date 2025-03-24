@@ -1,8 +1,8 @@
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MemberService } from './member.service';
 import { InternalServerErrorException, UseGuards } from '@nestjs/common';
-import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
-import { Member } from '../../libs/dto/member/member';
+import { AgentsInquiry, LoginInput, MemberInput } from '../../libs/dto/member/member.input';
+import { Member, Members } from '../../libs/dto/member/member';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { AuthMember } from '../auth/decorators/authMember.decorator';
 import { ObjectId } from 'mongoose';
@@ -11,6 +11,7 @@ import { MemberType } from '../../libs/enums/member.enum';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import {  MemberUpdate } from '../../libs/dto/member/member.update';
 import { shapeIntoMongoObjectId } from '../../libs/config';
+import { WithoutGuard } from '../auth/guards/without.guard';
 
 @Resolver()
 export class MemberResolver {
@@ -61,13 +62,22 @@ export class MemberResolver {
         return `Hi ${authMember.memberNick}, you are ${authMember.memberType} (memberId: ${authMember._id})`
     }
 
-
+    @UseGuards(WithoutGuard)
     @Query(() => Member)
-    public async getMember(@Args('memberId') input: string): Promise<Member> {
+    public async getMember(@Args('memberId') input: string, @AuthMember('_id') memberId: ObjectId): Promise<Member> {
         console.log('Query: getMember')
+        console.log('memberid:', memberId)
         const targetId= shapeIntoMongoObjectId(input);
-        return this.memberService.getMember(targetId);
+        return this.memberService.getMember(memberId, targetId);
     }
+
+    @UseGuards(WithoutGuard)
+    @Query(() => Members)
+    public async getAgents (@Args('input') input: AgentsInquiry, @AuthMember('_id') memberId: ObjectId): Promise<Members>{
+        console.log("Query getAgents")
+        return this.memberService.getAgents(memberId,input)
+    }
+    
 
     /** ADMIN **/
     @Roles(MemberType.ADMIN)

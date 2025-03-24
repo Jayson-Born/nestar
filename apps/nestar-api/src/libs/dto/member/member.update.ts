@@ -44,7 +44,7 @@ export class MemberUpdate {
     @Field(() => String, {nullable: true})
     memberImage?: string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @Field(() => String, {nullable: true})
     memberAddress?: string;
 
