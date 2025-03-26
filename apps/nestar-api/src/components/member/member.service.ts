@@ -98,7 +98,7 @@ export class MemberService {
     public async getAgents (memberId: ObjectId, input: AgentsInquiry): Promise<Members> {
         const{text} = input.search;
         const match :T = {memberType: MemberType.AGENT, memberStatus: MemberStatus.ACTIVE};
-        const sort : T = {[input?.sort ?? "createdAt"]: input?.direction ?? Direction.Desc};
+        const sort : T = {[input?.sort ?? "createdAt"]: input?.direction ?? Direction.DESC};
 
         if(text) match.memberNick={$regex: RegExp(text, 'i')};
         console.log("match:", match)
@@ -123,7 +123,7 @@ export class MemberService {
     public async getAllMembersByAdim(input: MembersInquiry): Promise<Members> {
         const{memberStatus, memberType, text} = input.search;
         const match :T = {};
-        const sort : T = {[input?.sort ?? "createdAt"]: input?.direction ?? Direction.Desc};
+        const sort : T = {[input?.sort ?? "createdAt"]: input?.direction ?? Direction.DESC};
         
         if(memberStatus) match.MemberStatus = memberStatus
         if(memberType) match.memberType = memberType

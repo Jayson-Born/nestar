@@ -19,12 +19,14 @@ export enum Message {
 	ONLY_SPECIFIC_ROLES_ALLOWED = "ONLY_SPECIFIC_ROLES_ALLOWED",
     UPLOAD_FAILED = "UPLOAD_FAILED",
     PROVIDE_ALLOWED_FORMAT = "PROVIDE_ALLOWED_FORMAT",
+    REMOVE_FAILED = "REMOVE_FAILED",
+    NOT_ALLOWED_REQUEST = "NOT_ALLOWED_REQUEST",
 }
 
 
 export enum Direction{
     ASC = 1,
-    Desc = -1,
+    DESC = -1,
 }
 
 registerEnumType(Direction, {
