@@ -39,7 +39,7 @@ export class PropertyService {
             throw new BadRequestException(Message.CREATE_FAILED);
         }
     }
-    public async getProperty(memberId: ObjectId | null, propertyId: ObjectId): Promise<Property> {
+    public async getProperty(memberId: ObjectId, propertyId: ObjectId): Promise<Property> {
 		const search: T = {
 			_id: propertyId,
 			propertyStatus: PropertyStatus.ACTIVE,

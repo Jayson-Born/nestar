@@ -64,6 +64,7 @@ export class PropertyUpdate {
 	@Field(() => Boolean, { nullable: true })
 	propertyBarter?: boolean;
 
+    
 	@IsOptional()
 	@Field(() => Boolean, { nullable: true })
 	propertyRent?: boolean;
