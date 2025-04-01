@@ -10,6 +10,7 @@ import { AppResolver } from './app.resolver';
 import { ComponentsModule } from './components/components.module';
 import { DatabaseModule } from './database/database.module';
 import { T } from './libs/types/common';
+import { CommentModule } from './components/comment/comment.module';
 
 @Module({
  imports: [ConfigModule.forRoot(),
@@ -30,6 +31,7 @@ import { T } from './libs/types/common';
      }),
      ComponentsModule,
      DatabaseModule,
+     CommentModule,
    ],
    controllers: [NestarBatchController, AppController],
    providers: [NestarBatchService, AppResolver, AppService],
