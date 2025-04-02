@@ -134,8 +134,8 @@ export class PropertyService {
 		return result[0];
 	}
 
-	 public async likeTargetMember(memberId: ObjectId, likeRefId: ObjectId): Promise<Property> {
-			const target :Property = await this.propertyModel.findOne({ _id: likeRefId, propertyStatus: PropertyStatus.ACTIVE }).exec() as unknown as Member;
+	 public async likeTargetProperty(memberId: ObjectId, likeRefId: ObjectId): Promise<Property> {
+			const target :Property = await this.propertyModel.findOne({ _id: likeRefId, propertyStatus: PropertyStatus.ACTIVE }).exec() as unknown as Property;
 			if (!target) {
 				throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 			}
