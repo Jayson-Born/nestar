@@ -77,28 +77,33 @@ export class MemberService {
     }
 
     public async getMember(memberId: ObjectId | null, targetId: ObjectId): Promise<Member> {
-        const search: T = {
-            _id: targetId,
-            memberStatus: {
-                $in: [MemberStatus.ACTIVE, MemberStatus.BLOCKED],
-            }
-        }
-        const targetMember = await this.memberModel.findOne(search).lean().exec();
-        if (!targetMember)
-            throw new InternalServerErrorException(Message.NO_DATA_FOUND);
-        if (memberId) {
-            const viewInput = { memberId: memberId, viewRefId: targetId, viewGroup: ViewGroup.MEMBER, ViewGroup: ViewGroup.MEMBER };
-            const newView = await this.viewService.recordView(viewInput)
-            if (newView) {
-                await this.memberModel.findOneAndUpdate(search, { $inc: { memberViews: 1 } }, { new: true }).exec();
-                targetMember.memberViews++
-            }
-        }
+		const search: T = {
+			_id: targetId,
+			memberStatus: {
+				$in: [MemberStatus.ACTIVE, MemberStatus.BLOCKED],
+			},
+		};
 
-        //me liked
-        //me followed
-        return targetMember;
+		const targetMember: Member | null = await this.memberModel.findOne(search).lean().exec();
+		if (!targetMember) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+
+		if (memberId) {
+			const viewInput = {
+				viewGroup: ViewGroup.MEMBER,
+				viewRefId: targetId,
+				memberId: memberId,
+			};
+			const newView = await this.viewService.recordView(viewInput);
+			if (newView) {
+				await this.memberModel.findOneAndUpdate(search, { $inc: { memberViews: 1 } }).exec();
+				targetMember.memberViews++;
+			}
+			const likeInput: LikeInput = { memberId: memberId, likeRefId: targetId, likeGroup: LikeGroup.MEMBER };
+			targetMember.meLiked = await this.likeService.checkLikeExistence(likeInput);
+    
     }
+    return targetMember;
+}
 
     public async getAgents(memberId: ObjectId, input: AgentsInquiry): Promise<Members> {
         const { text } = input.search;
