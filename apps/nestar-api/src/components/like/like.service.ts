@@ -29,6 +29,7 @@ export class LikeService {
 		}
 
 		return modifier;
+		
 	}
 
 	public async checkLikeExistence(input: LikeInput): Promise<MeLiked[]> {
