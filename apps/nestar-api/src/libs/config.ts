@@ -17,6 +17,7 @@ export const availablePropertySorts = [
  /** IMAGE CONFIGURATION **/ 
  import { v4 as uuidv4 } from 'uuid';
  import * as path from 'path';
+import { T } from "./types/common";
  
  export const validMimeTypes = ['image/png', 'image/jpg', 'image/jpeg'];
  export const getSerialForImage = (filename: string) => {
@@ -27,6 +28,42 @@ export const availablePropertySorts = [
 export const shapeIntoMongoObjectId = (target: any) => {
     return typeof target === 'string' ? new ObjectId(target) : target;
 };
+
+export const lookupAuthMemberLiked = (memberId: T, targetRefId: string = "$_id") => {
+
+    return{
+        $lookup: {  
+            from: 'likes',
+            let: {
+                localLikeRefId:targetRefId,
+                localMemberId: memberId,
+                localMyFavourite: true,
+            },
+            pipeline: [
+                {
+                    $match: {
+                        $expr: {
+                            $and: [
+                                {
+                                    $eq: ["$likeRefId", "$$localLikeRefId"]}, { $eq: ["$memberId", "$$localMemberId"] }]
+                        }
+
+                        },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        likeRefId: 1,
+                        memberId: 1,
+                        myFavourite: "$$localMyFavourite",
+                    }
+                }
+            ],
+            as: 'meLiked',
+    }
+ }
+}
+
 
 export const lookupMember = {
     $lookup: {
@@ -54,3 +91,4 @@ export const lookupMember = {
             as: 'followerData',
         }
     };
+    
