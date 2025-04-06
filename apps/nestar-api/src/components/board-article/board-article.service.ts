@@ -12,13 +12,13 @@ import { StatisticModifier, T } from '../../libs/types/common';
 import { MemberService } from '../member/member.service';
 import { ViewService } from '../view/view.service';
 import { BoardArticleUpdate } from '../../libs/dto/board-article/board-article.update';
-import { shapeIntoMongoObjectId, lookupMember } from '../../libs/config';
+import { shapeIntoMongoObjectId, lookupMember, lookupAuthMemberLiked } from '../../libs/config';
 import { LikeInput } from '../../libs/dto/like/like.input';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { LikeService } from '../like/like.service';
 
 @Injectable()
-// Removed duplicate class declaration
+
 	
 export class BoardArticleService {
     constructor(
@@ -90,7 +90,7 @@ export class BoardArticleService {
 		return result;
 	}
 
-    public async getBoardArticles(memberId: ObjectId | null, input: BoardArticlesInquiry): Promise<BoardArticles> {
+    public async getBoardArticles(memberId: ObjectId , input: BoardArticlesInquiry): Promise<BoardArticles> {
 		const { articleCategory, text } = input.search;
 		const match: T = { articleStatus: BoardArticleStatus.ACTIVE };
 		const sort: T = { [input?.sort ?? 'createdAt']: input?.direction ?? Direction.DESC };
@@ -111,6 +111,7 @@ export class BoardArticleService {
 						list: [
 							{ $skip: (input.page - 1) * input.limit },
 							{ $limit: input.limit },
+							lookupAuthMemberLiked(memberId),
 							lookupMember,
 							{ $unwind: '$memberData' },
 						],

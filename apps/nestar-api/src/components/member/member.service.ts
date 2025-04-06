@@ -13,6 +13,7 @@ import { ViewGroup } from '../../libs/enums/view.enum';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { LikeInput } from '../../libs/dto/like/like.input';
 import { LikeService } from '../like/like.service';
+import { lookupAuthMemberLiked } from '../../libs/config';
 
 
 @Injectable()
@@ -117,6 +118,7 @@ export class MemberService {
             .aggregate([
                 { $match: match },
                 { $sort: sort },
+                lookupAuthMemberLiked(memberId),
                 {
                     $facet: {
                         list: [{ $skip: (input.page - 1) * input.limit }, { $limit: input.limit }],
