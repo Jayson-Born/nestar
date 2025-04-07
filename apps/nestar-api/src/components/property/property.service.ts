@@ -195,6 +195,9 @@ export class PropertyService {
 	}
 
 	
+	public async getVisited(memberId: ObjectId, input: OrdinaryInquiry): Promise<Properties> {
+		return await this.viewService.getVisitedProperties(memberId, input);
+	}
     
     public async getAgentProperties(memberId: ObjectId, input: AgentPropertiesInquiry): Promise<Properties> {
 		const { page, limit, sort, direction, search } = input;
