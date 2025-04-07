@@ -11,6 +11,7 @@ import { ComponentsModule } from './components/components.module';
 import { DatabaseModule } from './database/database.module';
 import { T } from './libs/types/common';
 import { CommentModule } from './components/comment/comment.module';
+import { SocketModule } from './socket/socket.module';
 
 @Module({
  imports: [ConfigModule.forRoot(),
@@ -31,7 +32,7 @@ import { CommentModule } from './components/comment/comment.module';
      }),
      ComponentsModule,
      DatabaseModule,
-     CommentModule,
+     SocketModule,
    ],
    controllers: [NestarBatchController, AppController],
    providers: [NestarBatchService, AppResolver, AppService],
