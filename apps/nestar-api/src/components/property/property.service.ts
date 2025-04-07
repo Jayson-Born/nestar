@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, InternalServerErrorException } from '@
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { Properties, Property } from '../../libs/dto/property/property';
-import { AgentPropertiesInquiry, AllPropertiesInquiry, PISearch, PropertiesInquiry, PropertyInput } from '../../libs/dto/property/property.input';
+import { AgentPropertiesInquiry, AllPropertiesInquiry, OrdinaryInquiry, PISearch, PropertiesInquiry, PropertyInput } from '../../libs/dto/property/property.input';
 
 import { MemberService } from '../member/member.service';
 import { Direction, Message } from '../../libs/enums/common.enums';
@@ -120,6 +120,7 @@ export class PropertyService {
 						list: [
 							{ $skip: page - 1 },
 							{ $limit: limit },
+							//meLiked
 							lookupAuthMemberLiked(memberId),
 							lookupMember,
 							{ $unwind: '$memberData' },
@@ -134,6 +135,7 @@ export class PropertyService {
 
 		return result[0];
 	}
+
 
 	 public async likeTargetProperty(memberId: ObjectId, likeRefId: ObjectId): Promise<Property> {
 			const target :Property = await this.propertyModel.findOne({ _id: likeRefId, propertyStatus: PropertyStatus.ACTIVE }).exec() as unknown as Property;
@@ -186,6 +188,13 @@ export class PropertyService {
 			});
 		}
     }
+
+	
+	public async getFavorites(memberId: ObjectId, input: OrdinaryInquiry): Promise<Properties> {
+		return await this.likeService.getFavoriteProperties(memberId, input);
+	}
+
+	
     
     public async getAgentProperties(memberId: ObjectId, input: AgentPropertiesInquiry): Promise<Properties> {
 		const { page, limit, sort, direction, search } = input;

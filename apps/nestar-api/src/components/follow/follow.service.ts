@@ -54,7 +54,7 @@ export class FollowService {
 		return result;
 	}
 
-	public async getMemberFollowings(memberId: ObjectId , input: FollowInquiry): Promise<Followings> {
+	public async getMemberFollowings(memberId: ObjectId | null, input: FollowInquiry): Promise<Followings> {
 		const { page, limit, search } = input;
 		if (!search?.followerId) throw new InternalServerErrorException(Message.BAD_REQUEST);
 
@@ -70,8 +70,8 @@ export class FollowService {
 						list: [
 							{ $skip: (page - 1) * limit },
 							{ $limit: limit },
-							lookupAuthMemberLiked(memberId, "$$followingId"),
-							lookupAuthMemberFollowed({ followerId: memberId, followingId: "$$followingId" }),
+							...(memberId ? [lookupAuthMemberLiked(memberId, '$followingId')] : []),
+							...(memberId ? [lookupAuthMemberFollowed({ followerId: memberId, followingId: '$followingId' })] : []),
 							lookupFollowingData,
 							{ $unwind: '$followingData' },
 						],
@@ -84,8 +84,8 @@ export class FollowService {
 
 		return result[0];
 	}
-
-	public async getMemberFollowers(memberId: ObjectId , input: FollowInquiry): Promise<Followers> {
+	
+	public async getMemberFollowers(memberId: ObjectId, input: FollowInquiry): Promise<Followers> {
 		const { page, limit, search } = input;
 		if (!search?.followingId) throw new InternalServerErrorException(Message.BAD_REQUEST);
 
@@ -95,14 +95,17 @@ export class FollowService {
 		const result = await this.followModel
 			.aggregate([
 				{ $match: match },
-				{ $sort: { created: Direction.DESC } },
+				{ $sort: { createdAt: Direction.DESC } },
 				{
 					$facet: {
 						list: [
 							{ $skip: (page - 1) * limit },
 							{ $limit: limit },
-							lookupAuthMemberLiked(memberId, "$$followerId"),
-							// meFollowed
+							lookupAuthMemberLiked(memberId, '$followerId'), // meLiked
+							lookupAuthMemberFollowed({
+								followerId: memberId,
+								followingId: '$followerId'
+							}), // meFollowed
 							lookupFollowerData,
 							{ $unwind: '$followerData' },
 						],
@@ -111,7 +114,7 @@ export class FollowService {
 				},
 			])
 			.exec();
-		if (!result) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+		if (!result.length) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
 		return result[0];
 	}

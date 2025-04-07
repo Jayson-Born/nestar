@@ -33,14 +33,11 @@ export class FollowResolver {
 	@Query(() => Followings)
 	public async getMemberFollowings(
 		@Args('input') input: FollowInquiry,
-		@AuthMember('_id') memberId: ObjectId ,
+		@AuthMember('_id') memberId: ObjectId,
 	): Promise<Followings> {
 		console.log('Query: getMemberFollowings');
 		const { followerId } = input.search;
 		input.search.followerId = shapeIntoMongoObjectId(followerId);
-		if (!memberId) {
-			throw new Error('Member ID cannot be null');
-		}
 		return await this.followService.getMemberFollowings(memberId, input);
 	}
 
@@ -48,7 +45,7 @@ export class FollowResolver {
 	@Query(() => Followers)
 	public async getMemberFollowers(
 		@Args('input') input: FollowInquiry,
-		@AuthMember('_id') memberId: ObjectId ,
+		@AuthMember('_id') memberId: ObjectId,
 	): Promise<Followers> {
 		console.log('Query: getMemberFollowers');
 		const { followingId } = input.search;
