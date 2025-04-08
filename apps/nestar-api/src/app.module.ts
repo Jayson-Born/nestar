@@ -4,8 +4,8 @@ import { AppService } from './app.service';
 import { ConfigModule} from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver } from '@nestjs/apollo';
-import { NestarBatchController } from 'apps/nestar-batch/src/nestar-batch.controller';
-import { NestarBatchService } from 'apps/nestar-batch/src/nestar-batch.service';
+import { BatchController } from 'apps/nestar-batch/src/batch.controller';
+import { BatchService } from 'apps/nestar-batch/src/batch.service';
 import { AppResolver } from './app.resolver';
 import { ComponentsModule } from './components/components.module';
 import { DatabaseModule } from './database/database.module';
@@ -34,7 +34,7 @@ import { SocketModule } from './socket/socket.module';
      DatabaseModule,
      SocketModule,
    ],
-   controllers: [NestarBatchController, AppController],
-   providers: [NestarBatchService, AppResolver, AppService],
+   controllers: [BatchController, AppController],
+   providers: [BatchService, AppResolver, AppService],
 })
 export class AppModule {}
