@@ -43,7 +43,7 @@ memberDesc?: string;
 memberProperties: number;
 
 @Field(() => Int, )
-memberArticles: string;
+memberArticles: number;
 
 @Field(() => Int, )
 memberFollowers: number;
