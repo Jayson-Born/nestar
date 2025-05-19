@@ -20,7 +20,7 @@ export class FollowService {
 		if (followerId.toString() === followingId.toString()) {
 			throw new InternalServerErrorException(Message.SELF_SUBSRIPTION_DENIED);
 		}
-
+		//@ts-ignore
 		const targetMember = await this.memberService.getMember(null, followingId);
 		if (!targetMember) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
@@ -42,10 +42,13 @@ export class FollowService {
 	}
 
 	public async unsubscribe(followerId: ObjectId, followingId: ObjectId): Promise<Follower> {
+		//@ts-ignore
 		const targetMember = await this.memberService.getMember(null, followingId);
 		if (!targetMember) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
-		const result = await this.followModel.findOneAndDelete({ followingId: followingId, followerId: followerId });
+		const result = await this.followModel.findOneAndDelete({ followingId: followingId, followerId: followerId })
+		.exec();
+		
 		if (!result) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
 		await this.memberService.memberStateEditor({ _id: followerId, targetKey: 'memberFollowings', modifier: -1 });
